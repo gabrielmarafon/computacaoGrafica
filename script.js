@@ -135,7 +135,6 @@ function editObject() {
 
             obj.points = points;
         }
-        // Atualiza o viewport após edição
         drawViewport();
     } else {
         alert('Objeto não encontrado!');
@@ -337,14 +336,12 @@ function scaleObject() {
     }
 }
 
-// Função para selecionar objetos da display list
 function selectObject(name) {
     displayList.forEach(obj => {
         obj.selected = (obj.name === name);
     });
 }
 
-// Interface de usuário para aplicar as transformações
 function applyTransformations() {
     const dx = parseFloat(prompt("Informe o valor de translação em X:"));
     const dy = parseFloat(prompt("Informe o valor de translação em Y:"));
