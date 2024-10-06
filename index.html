@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Básico 2D</title>
+    <style>
+        body {
+            background-color: #2c2c2c;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        canvas {
+            border: 1px solid white;
+        }
+
+        #controls {
+            margin-top: 10px;
+        }
+
+        #objectList {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid white;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .object-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+
+        .object-item button {
+            background-color: #d9534f;
+            color: white;
+            border: none;
+            padding: 5px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Sistema Básico 2D</h1>
+    <canvas id="viewport" width="500" height="500"></canvas>
+
+    <div id="window-controls">
+        <button onclick="panLeft()">Esquerda</button>
+        <button onclick="panRight()">Direita</button>
+        <button onclick="panUp()">Cima</button>
+        <button onclick="panDown()">Baixo</button>
+        <button onclick="zoomIn()">Zoom In</button>
+        <button onclick="zoomOut()">Zoommm Out</button>
+        <button onclick="translateObject()">Transladar Objeto</button>
+        <button onclick="rotateObject()">Rotacionar Objeto</button>
+        <button onclick="scaleObject()">Escalonar Objeto</button>
+        <button onclick="applyTransformations()">Aplicar Todas as Transformações</button>
+    </div>
+
+    <div id="controls">
+        <h3>Adicionar Objeto</h3>
+        <input type="text" id="objectName" placeholder="Nome do Objeto">
+        <select id="objectType">
+            <option value="ponto">Ponto</option>
+            <option value="reta">Reta</option>
+            <option value="polilinha">Polilinha</option>
+            <option value="poligono">Polígono</option>
+        </select>
+        <input type="number" id="coordX" placeholder="X">
+        <input type="number" id="coordY" placeholder="Y">
+        <input type="color" id="lineColor" value="#ffffff">
+        <button onclick="addObject()">Adicionar</button>
+    </div>
+    <h3>Editar Objeto</h3>
+    <div id="transformation-container"></div>
+    <input type="text" id="editName" placeholder="Nome do Objeto">
+    <input type="number" id="newCoordX" placeholder="Novo X (para pontos e retas)">
+    <input type="number" id="newCoordY" placeholder="Novo Y (para pontos e retas)">
+    <button onclick="editObject()">Editar</button>
+
+
+    <div id="objectList">
+        <h3>Objetos na Display List</h3>
+        <ul id="list"></ul>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

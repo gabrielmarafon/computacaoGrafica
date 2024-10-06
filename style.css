@@ -1,0 +1,77 @@
+body {
+    background-color: #1e1e1e;
+    color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
+
+#controls {
+    margin-bottom: 20px;
+}
+
+#window-controls {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#window-controls button {
+    background-color: #333;
+    color: #f0f0f0;
+    border: 1px solid #555;
+    padding: 10px;
+    margin: 2px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#objectList {
+    margin-top: 20px;
+}
+
+.object-item {
+    margin: 5px 0;
+    padding: 10px;
+    background-color: #333;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.object-item button {
+    background-color: #d9534f;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+canvas {
+    background-color: #2d2d2d;
+    border: 1px solid #555;
+}
+
+#window-controls {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#window-controls button {
+    background-color: #333;
+    color: #f0f0f0;
+    border: 1px solid #555;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+#window-controls button:hover {
+    background-color: #444;
+}
+
+#window-controls button:active {
+    background-color: #555;
+}
