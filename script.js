@@ -70,6 +70,114 @@ function drawPolygon(polygon) {
     ctx.closePath();
 }
 
+// Classe Matriz para operações com vetores e matrizes de tamanho arbitrário
+class Matriz {
+    constructor(linhas, colunas) {
+        this.linhas = linhas;
+        this.colunas = colunas;
+        this.matriz = [];
+
+        // Inicializa a matriz com zeros
+        for (let i = 0; i < linhas; i++) {
+            this.matriz[i] = [];
+            for (let j = 0; j < colunas; j++) {
+                this.matriz[i][j] = 0;
+            }
+        }
+    }
+
+    // Define o valor em uma posição específica da matriz
+    setValor(linha, coluna, valor) {
+        if (linha >= 0 && linha < this.linhas && coluna >= 0 && coluna < this.colunas) {
+            this.matriz[linha][coluna] = valor;
+        } else {
+            throw new Error('Índices fora do limite da matriz.');
+        }
+    }
+
+    // Retorna o valor em uma posição específica da matriz
+    getValor(linha, coluna) {
+        if (linha >= 0 && linha < this.linhas && coluna >= 0 && coluna < this.colunas) {
+            return this.matriz[linha][coluna];
+        } else {
+            throw new Error('Índices fora do limite da matriz.');
+        }
+    }
+
+    // Multiplicação de matrizes
+    multiplicarMatriz(outraMatriz) {
+        if (this.colunas !== outraMatriz.linhas) {
+            throw new Error('Número de colunas da primeira matriz deve ser igual ao número de linhas da segunda matriz.');
+        }
+
+        let resultado = new Matriz(this.linhas, outraMatriz.colunas);
+
+        for (let i = 0; i < this.linhas; i++) {
+            for (let j = 0; j < outraMatriz.colunas; j++) {
+                let soma = 0;
+                for (let k = 0; k < this.colunas; k++) {
+                    soma += this.matriz[i][k] * outraMatriz.matriz[k][j];
+                }
+                resultado.setValor(i, j, soma);
+            }
+        }
+
+        return resultado;
+    }
+
+    // Função para imprimir a matriz no console
+    imprimir() {
+        for (let i = 0; i < this.linhas; i++) {
+            console.log(this.matriz[i].join(' '));
+        }
+    }
+}
+
+// Função de teste para multiplicação de duas matrizes
+function testeMultiplicacaoMatriz() {
+    try {
+        // Criar duas matrizes fixas
+        let m1 = new Matriz(2, 3); // 2 linhas, 3 colunas
+        let m2 = new Matriz(3, 2); // 3 linhas, 2 colunas
+
+        // Preencher valores da matriz m1
+        m1.setValor(0, 0, 1);
+        m1.setValor(0, 1, 2);
+        m1.setValor(0, 2, 3);
+        m1.setValor(1, 0, 4);
+        m1.setValor(1, 1, 5);
+        m1.setValor(1, 2, 6);
+
+        // Preencher valores da matriz m2
+        m2.setValor(0, 0, 7);
+        m2.setValor(0, 1, 8);
+        m2.setValor(1, 0, 9);
+        m2.setValor(1, 1, 10);
+        m2.setValor(2, 0, 11);
+        m2.setValor(2, 1, 12);
+
+        // Exibir as duas matrizes antes da multiplicação
+        console.log("Matriz 1:");
+        m1.imprimir();
+        console.log("Matriz 2:");
+        m2.imprimir();
+
+        // Multiplicar as duas matrizes
+        let resultadoMatriz = m1.multiplicarMatriz(m2);
+
+        // Exibir o resultado da multiplicação
+        console.log("Resultado da multiplicação de Matrizes:");
+        resultadoMatriz.imprimir();
+
+    } catch (error) {
+        console.error("Erro: " + error.message);
+    }
+}
+
+// Executa o teste de multiplicação de matrizes
+testeMultiplicacaoMatriz();
+
+
 function addObject() {
     const name = document.getElementById('objectName').value;
     const type = document.getElementById('objectType').value;
