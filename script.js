@@ -70,14 +70,12 @@ function drawPolygon(polygon) {
     ctx.closePath();
 }
 
-// Classe Matriz para operações com vetores e matrizes de tamanho arbitrário
 class Matriz {
     constructor(linhas, colunas) {
         this.linhas = linhas;
         this.colunas = colunas;
         this.matriz = [];
 
-        // Inicializa a matriz com zeros
         for (let i = 0; i < linhas; i++) {
             this.matriz[i] = [];
             for (let j = 0; j < colunas; j++) {
@@ -86,7 +84,6 @@ class Matriz {
         }
     }
 
-    // Define o valor em uma posição específica da matriz
     setValor(linha, coluna, valor) {
         if (linha >= 0 && linha < this.linhas && coluna >= 0 && coluna < this.colunas) {
             this.matriz[linha][coluna] = valor;
@@ -95,7 +92,6 @@ class Matriz {
         }
     }
 
-    // Retorna o valor em uma posição específica da matriz
     getValor(linha, coluna) {
         if (linha >= 0 && linha < this.linhas && coluna >= 0 && coluna < this.colunas) {
             return this.matriz[linha][coluna];
@@ -104,7 +100,6 @@ class Matriz {
         }
     }
 
-    // Multiplicação de matrizes
     multiplicarMatriz(outraMatriz) {
         if (this.colunas !== outraMatriz.linhas) {
             throw new Error('Número de colunas da primeira matriz deve ser igual ao número de linhas da segunda matriz.');
@@ -125,7 +120,6 @@ class Matriz {
         return resultado;
     }
 
-    // Função para imprimir a matriz no console
     imprimir() {
         for (let i = 0; i < this.linhas; i++) {
             console.log(this.matriz[i].join(' '));
@@ -133,14 +127,11 @@ class Matriz {
     }
 }
 
-// Função de teste para multiplicação de duas matrizes
 function testeMultiplicacaoMatriz() {
     try {
-        // Criar duas matrizes fixas
-        let m1 = new Matriz(2, 3); // 2 linhas, 3 colunas
-        let m2 = new Matriz(3, 2); // 3 linhas, 2 colunas
+        let m1 = new Matriz(2, 3); 
+        let m2 = new Matriz(3, 2); 
 
-        // Preencher valores da matriz m1
         m1.setValor(0, 0, 1);
         m1.setValor(0, 1, 2);
         m1.setValor(0, 2, 3);
@@ -148,7 +139,6 @@ function testeMultiplicacaoMatriz() {
         m1.setValor(1, 1, 5);
         m1.setValor(1, 2, 6);
 
-        // Preencher valores da matriz m2
         m2.setValor(0, 0, 7);
         m2.setValor(0, 1, 8);
         m2.setValor(1, 0, 9);
@@ -156,16 +146,13 @@ function testeMultiplicacaoMatriz() {
         m2.setValor(2, 0, 11);
         m2.setValor(2, 1, 12);
 
-        // Exibir as duas matrizes antes da multiplicação
         console.log("Matriz 1:");
         m1.imprimir();
         console.log("Matriz 2:");
         m2.imprimir();
 
-        // Multiplicar as duas matrizes
         let resultadoMatriz = m1.multiplicarMatriz(m2);
 
-        // Exibir o resultado da multiplicação
         console.log("Resultado da multiplicação de Matrizes:");
         resultadoMatriz.imprimir();
 
@@ -174,7 +161,6 @@ function testeMultiplicacaoMatriz() {
     }
 }
 
-// Executa o teste de multiplicação de matrizes
 testeMultiplicacaoMatriz();
 
 
@@ -191,11 +177,13 @@ function addObject() {
         const x2 = parseInt(prompt("Informe a coordenada X2 da reta:"));
         const y2 = parseInt(prompt("Informe a coordenada Y2 da reta:"));
         displayList.push({ name, type, x1: x, y1: y, x2, y2, color });
-    } else if (type === 'poligono') {
+    } else if (type === 'poligono' || type === 'polilinha') {
         let points = [];
-        let numberOfPoints = parseInt(prompt("Quantos pontos terá o polígono? (mínimo 3)"));
-        if (numberOfPoints < 3) {
-            alert("Polígonos precisam ter pelo menos 3 pontos!");
+        let numberOfPoints = parseInt(prompt("Quantos pontos terá o poligono? (mínimo 2 para polilinha, 3 para polígono)"));
+        
+        const minPoints = type === 'poligono' ? 3 : 2;
+        if (numberOfPoints < minPoints) {
+            alert(`${type.charAt(0).toUpperCase() + type.slice(1)} precisa ter pelo menos ${minPoints} pontos!`);
             return;
         }
 
@@ -209,6 +197,23 @@ function addObject() {
     }
 
     drawViewport();
+}
+
+function drawPolyline(polyline) {
+    if (polyline.points.length < 2) return; // Evita polilinhas com menos de 2 pontos
+    
+    ctx.strokeStyle = polyline.color || 'white';
+    ctx.beginPath();
+    const start = transformToViewport(polyline.points[0].x, polyline.points[0].y);
+    ctx.moveTo(start.x, viewportHeight - start.y);
+
+    for (let i = 1; i < polyline.points.length; i++) {
+        const point = transformToViewport(polyline.points[i].x, polyline.points[i].y);
+        ctx.lineTo(point.x, viewportHeight - point.y);
+    }
+
+    ctx.stroke();
+    ctx.closePath();
 }
 
 function editObject() {
@@ -289,8 +294,8 @@ const viewportWidth = canvas.width;
 const viewportHeight = canvas.height;
 
 function transformToViewport(x, y) {
-    const transformedX = ((x - windowX) / windowWidth) * viewportWidth;
-    const transformedY = ((y - windowY) / windowHeight) * viewportHeight;
+    const transformedX = ((x - windowX) / windowWidth) * viewportWidth + viewportWidth / 2;
+    const transformedY = ((y - windowY) / windowHeight) * viewportHeight + viewportHeight / 2;
     return { x: transformedX, y: transformedY };
 }
 
@@ -459,4 +464,41 @@ function applyTransformations() {
     translateObject(dx, dy);
     rotateObject(angle);
     scaleObject(scaleFactor);
+}
+
+function applyMatrix(matrix, point) {
+    const { x, y } = point;
+    const newX = matrix[0][0] * x + matrix[0][1] * y + matrix[0][2];
+    const newY = matrix[1][0] * x + matrix[1][1] * y + matrix[1][2];
+    return { x: newX, y: newY };
+}
+
+function translate(points, dx, dy) {
+    const translationMatrix = [
+        [1, 0, dx],
+        [0, 1, dy],
+        [0, 0, 1]
+    ];
+    return points.map(point => applyMatrix(translationMatrix, point));
+}
+
+function rotate(points, angle) {
+    const radians = angle * (Math.PI / 180);
+    const cosTheta = Math.cos(radians);
+    const sinTheta = Math.sin(radians);
+    const rotationMatrix = [
+        [cosTheta, -sinTheta, 0],
+        [sinTheta, cosTheta, 0],
+        [0, 0, 1]
+    ];
+    return points.map(point => applyMatrix(rotationMatrix, point));
+}
+
+function scale(points, sx, sy) {
+    const scaleMatrix = [
+        [sx, 0, 0],
+        [0, sy, 0],
+        [0, 0, 1]
+    ];
+    return points.map(point => applyMatrix(scaleMatrix, point));
 }
